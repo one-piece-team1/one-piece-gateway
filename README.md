@@ -1,5 +1,6 @@
 # README
 
+[![one-piece-gateway](https://circleci.com/gh/one-piece-team1/one-piece-gateway.svg?style=svg)](https://circleci.com/gh/one-piece-team1/one-piece-gateway.svg?style=svg)
 ## LICENCE
 
 Copyright [2020]["11","ivonne", "mina", "evena"]
