@@ -52,7 +52,7 @@ const configs = {
     NAME: packageNameGetter(),
     DESCRIPTION: packageDescriptionGetter(),
     // API
-    PREFIX: process.env.APPAPIPREFIX || 'v1.*',
+    PREFIX: process.env.APPAPIPREFIX || 'v1.0',
     VERSION: packageVersionGetter(),
     API_EXPLORER_PATH: process.env.APPAPIEXPLORERPATH || '/api',
     // Server Setting
@@ -74,15 +74,13 @@ const configs = {
       },
     },
 
-    DB_SETTINGS: {
-      host: process.env.DBHOST || 'localhost',
-      port: process.env.DBPORT || 5432,
-      username: process.env.DBUSERNAME || 'postgres',
-      password: process.env.DBPASSWORD || '123',
-      database: process.env.DBDATABASE || 'lib',
-      schema: process.env.DBSCHEMA || 'public',
-      gatewayTable: process.env.DBRATETABLE || 'gateway',
-    },
+    MS_SETTINGS: [
+      {
+        name: process.env.USERSERVER || 'one-piece-user',
+        host: process.env.USERSERVERHOST || '127.0.0.1',
+        port: process.env.USERSERVERPORT || 7071,
+      },
+    ],
 
     REDIS_URL: process.env.REDISRATELIMITURL || "redis://127.0.0.1:6379",
 
