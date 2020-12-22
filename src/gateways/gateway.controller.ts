@@ -1,9 +1,4 @@
-import {
-  Controller,
-  Get,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Controller, Get, UsePipes, ValidationPipe } from '@nestjs/common';
 import { GatewayService } from './gateway.service';
 
 @Controller('')
