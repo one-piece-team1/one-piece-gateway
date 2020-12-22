@@ -1,1 +1,1 @@
-export * as IGateway from './gateway.interface';
+export * from './gateway.interface';

@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { config } from '../../config';
 import { APIRequestFactory } from '../libs/request-factory';
-import { IGateway } from './interfaces';
+import * as IGateway from './interfaces';
 
 @Injectable()
 export class GatewayService {
