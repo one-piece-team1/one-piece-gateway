@@ -1,13 +1,23 @@
-import { Controller, Get, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Controller,
+  Request,
+  Get,
+  UsePipes,
+  ValidationPipe,
+  HttpException,
+} from '@nestjs/common';
 import { GatewayService } from './gateway.service';
+import * as Express from 'express';
 
-@Controller('')
+@Controller('/*')
 export class GatewayController {
   constructor(private readonly gatewayService: GatewayService) {}
 
   @Get()
   @UsePipes(ValidationPipe)
-  getRequest(): Promise<string> {
-    return this.gatewayService.getRequest();
+  getRequest(
+    @Request() req: Express.Request,
+  ): Promise<HttpException | unknown> {
+    return this.gatewayService.getRequest(req);
   }
 }

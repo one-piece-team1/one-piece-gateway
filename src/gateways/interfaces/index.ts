@@ -1,0 +1,1 @@
+export * as IGateway from './gateway.interface';
