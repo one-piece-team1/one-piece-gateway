@@ -6,7 +6,6 @@ import * as IGateway from './interfaces';
 
 @Injectable()
 export class GatewayService {
-
   /**
    * @description Get Request Routing to desingating server
    * @public
