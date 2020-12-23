@@ -30,7 +30,6 @@ export class AuthService implements NestMiddleware {
     if (this.exceptRoutes(req.baseUrl)) return next();
     // check token
     if (!req.headers.authorization) return res.sendStatus(403);
-
     try {
       // get user data from user sercice
       const response = await this.requestUesr(req.headers.authorization);
