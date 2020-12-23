@@ -14,16 +14,25 @@ import { APIRequestFactory } from '../libs/request-factory';
 export class AuthService implements NestMiddleware {
   private logger: Logger = new Logger('AuthService');
 
+  /**
+   * @description Auth validation Handler
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @returns {Promise<void | Response>}
+   */
   public async use(
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void | Response> {
+    // check if routes is exception or not
     if (this.exceptRoutes(req.baseUrl)) return next();
-
+    // check token
     if (!req.headers.authorization) return res.sendStatus(403);
 
     try {
+      // get user data from user sercice
       const response = await this.requestUesr(req.headers.authorization);
       if (response.statusCode !== 200) return res.sendStatus(403);
       next();
@@ -33,6 +42,11 @@ export class AuthService implements NestMiddleware {
     }
   }
 
+  /**
+   * @description Handle Exception Routes which don't need to auth verify
+   * @param {string} routes
+   * @returns {boolean}
+   */
   protected exceptRoutes(routes: string): boolean {
     for (let i = 0; i < config.MS_EXCEPT.length; i++) {
       if (routes.indexOf(config.MS_EXCEPT[i]) >= 0) return true;
@@ -40,6 +54,11 @@ export class AuthService implements NestMiddleware {
     return false;
   }
 
+  /**
+   * @description Request user info by token to identify if it's validate user
+   * @param {string} token
+   * @returns {Promise<any>}
+   */
   protected async requestUesr(token: string): Promise<any> {
     try {
       const service = config.MS_SETTINGS[0];
