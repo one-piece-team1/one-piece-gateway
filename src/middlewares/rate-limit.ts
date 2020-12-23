@@ -24,7 +24,7 @@ export class RateMiddleware implements NestMiddleware {
     // check token
     if (!req.headers.authorization) return res.sendStatus(403);
 
-    const token = req.headers.authorization.replace("Bearer ", "");
+    const token = req.headers.authorization.replace('Bearer ', '');
 
     // start redis process
     redisClient.exists(token, (err, reply) => {
@@ -47,7 +47,9 @@ export class RateMiddleware implements NestMiddleware {
 
           // get current counter
           const request_count_per_minutes = data.filter((item: IRateLimit) => {
-            const diff_time = new Date(current_time).getTime() - new Date(item.request_time).getTime();
+            const diff_time =
+              new Date(current_time).getTime() -
+              new Date(item.request_time).getTime();
             if (diff_time >= 60 * 1000) {
               item.request_time = new Date(current_time);
               item.counter = 0;
