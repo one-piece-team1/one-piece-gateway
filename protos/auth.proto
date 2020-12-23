@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package auth;
+
+service AuthService {
+  rpc FindOne (AuthToken) returns (AuthUser) {}
+}
+
+message AuthToken {
+  string token = 1;
+}
+
+message AuthUser {
+  string id = 1;
+  string username = 2;
+}

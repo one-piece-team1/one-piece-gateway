@@ -82,6 +82,11 @@ const configs = {
       },
     ],
 
+    MS_EXCEPT: [
+      "signin",
+      "signup"
+    ],
+
     REDIS_URL: process.env.REDISRATELIMITURL || "redis://127.0.0.1:6379",
 
     GEO_CONFIGS: {
