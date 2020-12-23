@@ -65,7 +65,7 @@ export class GatewayService {
         method: 'GET',
         headers: {
           'service-name': service.name,
-          'Authorization': serviceToken,
+          Authorization: serviceToken,
         },
         json: true,
       });
@@ -132,7 +132,7 @@ export class GatewayService {
         method: 'POST',
         headers: {
           'service-name': service.name,
-          'Authorization': serviceToken,
+          Authorization: serviceToken,
         },
         body: req.body,
         json: true,
@@ -207,7 +207,7 @@ export class GatewayService {
         method: 'PUT',
         headers: {
           'service-name': service.name,
-          'Authorization': serviceToken,
+          Authorization: serviceToken,
         },
         body: req.body,
         json: true,
@@ -282,7 +282,7 @@ export class GatewayService {
         method: 'DELETE',
         headers: {
           'service-name': service.name,
-          'Authorization': serviceToken,
+          Authorization: serviceToken,
         },
         json: true,
       });
