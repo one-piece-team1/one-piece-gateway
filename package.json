@@ -59,7 +59,6 @@
     "ioredis": "^4.19.2",
     "lodash": "^4.17.20",
     "pg": "^8.5.1",
-    "proxy-addr": "^2.0.6",
     "reflect-metadata": "^0.1.13",
     "request-promise": "^4.2.6",
     "rimraf": "^3.0.2",
