@@ -1,13 +1,50 @@
-import { Controller, Get, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Controller,
+  Request,
+  Get,
+  UsePipes,
+  ValidationPipe,
+  HttpException,
+  Post,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { GatewayService } from './gateway.service';
+import * as Express from 'express';
 
-@Controller('')
+@Controller('/*')
 export class GatewayController {
   constructor(private readonly gatewayService: GatewayService) {}
 
   @Get()
   @UsePipes(ValidationPipe)
-  getRequest(): Promise<string> {
-    return this.gatewayService.getRequest();
+  getRequest(
+    @Request() req: Express.Request,
+  ): Promise<HttpException | unknown> {
+    return this.gatewayService.getRequest(req);
+  }
+
+  @Post()
+  @UsePipes(ValidationPipe)
+  postRequest(
+    @Request() req: Express.Request,
+  ): Promise<HttpException | unknown> {
+    return this.gatewayService.postRequest(req);
+  }
+
+  @Put()
+  @UsePipes(ValidationPipe)
+  putRequest(
+    @Request() req: Express.Request,
+  ): Promise<HttpException | unknown> {
+    return this.gatewayService.putRequest(req);
+  }
+
+  @Delete()
+  @UsePipes(ValidationPipe)
+  delRequest(
+    @Request() req: Express.Request,
+  ): Promise<HttpException | unknown> {
+    return this.gatewayService.delRequest(req);
   }
 }
