@@ -18,6 +18,15 @@ export class GatewayService {
     /**
      * @todo get current token
      */
+    const serviceToken: string | undefined = req.header('Authorization');
+    if (typeof serviceToken !== 'string')
+      return new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: 'Method Not Allowed',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
 
     // check service name
     if (typeof serviceName !== 'string')
@@ -56,6 +65,7 @@ export class GatewayService {
         method: 'GET',
         headers: {
           'service-name': service.name,
+          'Authorization': serviceToken,
         },
         json: true,
       });
@@ -82,6 +92,8 @@ export class GatewayService {
     /**
      * @todo get current token
      */
+    // const exceptionRoutes = ["signin", 'signup'];
+    const serviceToken: string | undefined = req.header('Authorization');
 
     // check service name
     if (typeof serviceName !== 'string')
@@ -120,6 +132,7 @@ export class GatewayService {
         method: 'POST',
         headers: {
           'service-name': service.name,
+          'Authorization': serviceToken,
         },
         body: req.body,
         json: true,
@@ -147,6 +160,15 @@ export class GatewayService {
     /**
      * @todo get current token
      */
+    const serviceToken: string | undefined = req.header('Authorization');
+    if (typeof serviceToken !== 'string')
+      return new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: 'Method Not Allowed',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
 
     // check service name
     if (typeof serviceName !== 'string')
@@ -185,6 +207,7 @@ export class GatewayService {
         method: 'PUT',
         headers: {
           'service-name': service.name,
+          'Authorization': serviceToken,
         },
         body: req.body,
         json: true,
@@ -212,6 +235,15 @@ export class GatewayService {
     /**
      * @todo get current token
      */
+    const serviceToken: string | undefined = req.header('Authorization');
+    if (typeof serviceToken !== 'string')
+      return new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: 'Method Not Allowed',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
 
     // check service name
     if (typeof serviceName !== 'string')
@@ -250,6 +282,7 @@ export class GatewayService {
         method: 'DELETE',
         headers: {
           'service-name': service.name,
+          'Authorization': serviceToken,
         },
         json: true,
       });
