@@ -15,6 +15,8 @@ export class GatewayService {
   protected checkIsThirdPartyRoutes(req: Request): string {
     if (req.params['0'].indexOf('google') >= 0) {
       return config.MS_SETTINGS[0].name;
+    } else if (req.params['0'].indexOf('facebook') >= 0) {
+      return config.MS_SETTINGS[0].name;
     } else {
       return req.header('service-name');
     }
@@ -28,6 +30,8 @@ export class GatewayService {
    */
   protected isVerifyRequired(req: Request): boolean {
     if (req.params['0'].indexOf('google') >= 0) {
+      return false;
+    } else if (req.params['0'].indexOf('facebook') >= 0) {
       return false;
     } else {
       return true;
