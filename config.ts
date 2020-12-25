@@ -52,7 +52,7 @@ const configs = {
     NAME: packageNameGetter(),
     DESCRIPTION: packageDescriptionGetter(),
     // API
-    PREFIX: process.env.APPAPIPREFIX || 'v1.0',
+    PREFIX: process.env.APPAPIPREFIX || 'v1',
     VERSION: packageVersionGetter(),
     API_EXPLORER_PATH: process.env.APPAPIEXPLORERPATH || '/api',
     // Server Setting
@@ -82,6 +82,14 @@ const configs = {
       },
     ],
 
+    MS_EXCEPT: [
+      "signin",
+      "signup",
+      "google",
+      "facebook",
+      "apple"
+    ],
+
     REDIS_URL: process.env.REDISRATELIMITURL || "redis://127.0.0.1:6379",
 
     GEO_CONFIGS: {
@@ -91,10 +99,10 @@ const configs = {
   },
   development: {},
   production: {
-    PORT: process.env.APPPORT || 7071,
+    PORT: process.env.APPPORT || 8080,
   },
   test: {
-    PORT: 7072,
+    PORT: 8080,
   },
 };
 

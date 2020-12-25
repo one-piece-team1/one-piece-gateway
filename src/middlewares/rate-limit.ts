@@ -1,64 +1,71 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import * as proxyaddr from 'proxy-addr';
 import Redis from 'ioredis';
 import { config } from '../../config';
 const redisClient = new Redis(config.REDIS_URL);
 
 interface IRateLimit {
-  request_time: number;
+  request_time: Date;
   counter: number;
 }
 
 @Injectable()
 export class RateMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
-    const addrs: string[] = proxyaddr.all(req, 'uniquelocal');
+  /**
+   * @description Rate Limit Handling
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @returns {void | Response}
+   */
+  use(req: Request, res: Response, next: NextFunction): void | Response {
+    // check if routes is exception or not
+    if (this.exceptRoutes(req.baseUrl)) return next();
+    // check token
+    if (!req.headers.authorization) return res.sendStatus(403);
 
-    if (typeof addrs !== 'object') return res.sendStatus(401);
+    const token = req.headers.authorization.replace('Bearer ', '');
 
-    if (addrs.length === 0) return res.sendStatus(401);
-
-    // take only one IP
-    const addr: string = addrs[0];
-    redisClient.exists(addr, (err, reply) => {
+    // start redis process
+    redisClient.exists(token, (err, reply) => {
       if (err) {
         Logger.log(err.message, 'REDIS-RATE-LIMIT-ERR', true);
         process.exit(0);
       }
+      // if redis responding
       if (reply === 1) {
-        redisClient.get(addr, (err, response) => {
+        // get redis data by token
+        redisClient.get(token, (err, response) => {
           if (err) {
             Logger.log(err.message, 'REDIS-RATE-LIMIT-ERR', true);
           }
+          // data handling
           const data = JSON.parse(response);
           const current_time: string = new Date().toLocaleString('zh-TW', {
             timeZone: 'Asia/Taipei',
           });
-          const idle_time = new Date(current_time).setMinutes(
-            new Date(current_time).getMinutes() - 1,
-          );
+
+          // get current counter
           const request_count_per_minutes = data.filter((item: IRateLimit) => {
             const diff_time =
-              new Date(item.request_time).getMinutes() -
-              new Date(idle_time).getMinutes();
-            if (new Date(item.request_time) > new Date(idle_time)) return item;
-            if (diff_time < 0) redisClient.del(addr);
+              new Date(current_time).getTime() -
+              new Date(item.request_time).getTime();
+            if (diff_time >= 60 * 1000) {
+              item.request_time = new Date(current_time);
+              item.counter = 0;
+            }
             return item;
           });
 
+          // data handling to increment threshold
           let threshold = 0;
-          Logger.log(
-            JSON.stringify(request_count_per_minutes),
-            'request_count_per_minutes',
-            true,
-          );
           request_count_per_minutes.forEach(item => {
             threshold += item.counter;
           });
-          Logger.log(threshold, 'threshold', true);
+
+          // rate exception
           if (threshold >= 100) {
-            Logger.log(addr, 'REDIS-RATE-LIMIT-ECEED', true);
+            Logger.log(token, 'REDIS-RATE-LIMIT-ECEED', true);
             return res
               .status(429)
               .json({ status: 'error', message: 'Throttle Limit Exceeded' });
@@ -66,6 +73,7 @@ export class RateMiddleware implements NestMiddleware {
 
           let is_found = false;
 
+          // incrementation
           data.forEach(element => {
             if (element.request_time) {
               is_found = true;
@@ -79,12 +87,7 @@ export class RateMiddleware implements NestMiddleware {
               counter: 1,
             });
           }
-          Logger.log(
-            `Address: ${addr} data: ${JSON.stringify(data)}`,
-            'Check',
-            true,
-          );
-          redisClient.set(addr, JSON.stringify(data));
+          redisClient.set(token, JSON.stringify(data), 'EX', 60);
           next();
         });
       } else {
@@ -95,9 +98,21 @@ export class RateMiddleware implements NestMiddleware {
           }),
           counter: 1,
         });
-        redisClient.set(addr, JSON.stringify(data), 'EX', 1);
+        redisClient.set(token, JSON.stringify(data), 'EX', 60);
         next();
       }
     });
+  }
+
+  /**
+   * @description Handle Exception Routes which don't need to auth verify
+   * @param {string} routes
+   * @returns {boolean}
+   */
+  protected exceptRoutes(routes: string): boolean {
+    for (let i = 0; i < config.MS_EXCEPT.length; i++) {
+      if (routes.indexOf(config.MS_EXCEPT[i]) >= 0) return true;
+    }
+    return false;
   }
 }

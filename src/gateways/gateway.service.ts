@@ -7,6 +7,34 @@ import * as IGateway from './interfaces';
 @Injectable()
 export class GatewayService {
   /**
+   * @description Check if it's third party routes
+   * @protected
+   * @param {Request} req
+   * @returns {string}
+   */
+  protected checkIsThirdPartyRoutes(req: Request): string {
+    if (req.params['0'].indexOf('google') >= 0) {
+      return config.MS_SETTINGS[0].name;
+    } else {
+      return req.header('service-name');
+    }
+  }
+
+  /**
+   * @description Check if verify is required for open routes use, for example third party login landing page or callback url
+   * @protected
+   * @param {Request} req
+   * @returns {boolean}
+   */
+  protected isVerifyRequired(req: Request): boolean {
+    if (req.params['0'].indexOf('google') >= 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  /**
    * @description Get Request Routing to desingating server
    * @public
    * @param {Request} req
@@ -14,10 +42,19 @@ export class GatewayService {
    */
   public async getRequest(req: Request): Promise<HttpException | unknown> {
     // get current service name
-    const serviceName: string | undefined = req.header('service-name');
+    const serviceName: string | undefined = this.checkIsThirdPartyRoutes(req);
     /**
      * @todo get current token
      */
+    const serviceToken: string | undefined = req.header('Authorization');
+    if (typeof serviceToken !== 'string' && this.isVerifyRequired(req))
+      return new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: 'Method Not Allowed',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
 
     // check service name
     if (typeof serviceName !== 'string')
@@ -56,6 +93,7 @@ export class GatewayService {
         method: 'GET',
         headers: {
           'service-name': service.name,
+          Authorization: serviceToken,
         },
         json: true,
       });
@@ -82,6 +120,8 @@ export class GatewayService {
     /**
      * @todo get current token
      */
+    // const exceptionRoutes = ["signin", 'signup'];
+    const serviceToken: string | undefined = req.header('Authorization');
 
     // check service name
     if (typeof serviceName !== 'string')
@@ -120,6 +160,7 @@ export class GatewayService {
         method: 'POST',
         headers: {
           'service-name': service.name,
+          Authorization: serviceToken,
         },
         body: req.body,
         json: true,
@@ -147,6 +188,15 @@ export class GatewayService {
     /**
      * @todo get current token
      */
+    const serviceToken: string | undefined = req.header('Authorization');
+    if (typeof serviceToken !== 'string')
+      return new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: 'Method Not Allowed',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
 
     // check service name
     if (typeof serviceName !== 'string')
@@ -185,6 +235,7 @@ export class GatewayService {
         method: 'PUT',
         headers: {
           'service-name': service.name,
+          Authorization: serviceToken,
         },
         body: req.body,
         json: true,
@@ -212,6 +263,15 @@ export class GatewayService {
     /**
      * @todo get current token
      */
+    const serviceToken: string | undefined = req.header('Authorization');
+    if (typeof serviceToken !== 'string')
+      return new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: 'Method Not Allowed',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
 
     // check service name
     if (typeof serviceName !== 'string')
@@ -250,6 +310,7 @@ export class GatewayService {
         method: 'DELETE',
         headers: {
           'service-name': service.name,
+          Authorization: serviceToken,
         },
         json: true,
       });
