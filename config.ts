@@ -87,7 +87,10 @@ const configs = {
       "signup",
       "google",
       "facebook",
-      "apple"
+      "apple",
+      "/forgets/generates",
+      '/forgets/verifies',
+      '/forgets/confirms'
     ],
 
     REDIS_URL: process.env.REDISRATELIMITURL || "redis://127.0.0.1:6379",
