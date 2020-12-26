@@ -102,7 +102,7 @@ export class GatewayService {
         json: true,
       });
     } catch (error) {
-      return new HttpException(
+      throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: error.message,
@@ -170,7 +170,7 @@ export class GatewayService {
         json: true,
       });
     } catch (error) {
-      return new HttpException(
+      throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: error.message,
@@ -245,7 +245,7 @@ export class GatewayService {
         json: true,
       });
     } catch (error) {
-      return new HttpException(
+      throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: error.message,
@@ -319,7 +319,7 @@ export class GatewayService {
         json: true,
       });
     } catch (error) {
-      return new HttpException(
+      throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           error: error.message,
