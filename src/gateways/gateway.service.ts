@@ -95,7 +95,7 @@ export class GatewayService {
       return await APIRequestFactory.createRequest('standard').makeRequest({
         url:
           config.ENV === 'development'
-            ? `https://${service.url}/${endpoint}`
+            ? `https://${service.url}${endpoint}`
             : `http://${service.host}:${service.port}${endpoint}`,
         method: 'GET',
         headers: {
@@ -165,7 +165,7 @@ export class GatewayService {
       return await APIRequestFactory.createRequest('standard').makeRequest({
         url:
           config.ENV === 'development'
-            ? `https://${service.url}/${endpoint}`
+            ? `https://${service.url}${endpoint}`
             : `http://${service.host}:${service.port}${endpoint}`,
         method: 'POST',
         headers: {
@@ -243,7 +243,7 @@ export class GatewayService {
       return await APIRequestFactory.createRequest('standard').makeRequest({
         url:
           config.ENV === 'development'
-            ? `https://${service.url}/${endpoint}`
+            ? `https://${service.url}${endpoint}`
             : `http://${service.host}:${service.port}${endpoint}`,
         method: 'PUT',
         headers: {
@@ -321,7 +321,7 @@ export class GatewayService {
       return await APIRequestFactory.createRequest('standard').makeRequest({
         url:
           config.ENV === 'development'
-            ? `https://${service.url}/${endpoint}`
+            ? `https://${service.url}${endpoint}`
             : `http://${service.host}:${service.port}${endpoint}`,
         method: 'DELETE',
         headers: {
