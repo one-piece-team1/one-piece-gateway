@@ -102,7 +102,7 @@ const configs = {
   },
   development: {
     HOST: process.env.SERVERHEROKUURL || 'localhost',
-    PORT: process.env.APPPORT || 443,
+    PORT: process.env.PORT || 443,
   },
   production: {
     PORT: process.env.APPPORT || 8080,
