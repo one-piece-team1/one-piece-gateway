@@ -101,8 +101,33 @@ const configs = {
     }
   },
   development: {
+    NAME: packageNameGetter(),
+    DESCRIPTION: packageDescriptionGetter(),
+    // API
+    PREFIX: process.env.APPAPIPREFIX || 'v1',
+    VERSION: packageVersionGetter(),
+    API_EXPLORER_PATH: process.env.APPAPIEXPLORERPATH || '/api',
     HOST: process.env.SERVERHEROKUURL || 'localhost',
     PORT: process.env.PORT || 443,
+    MS_SETTINGS: [
+      {
+        name: process.env.USERSERVER || 'one-piece-user',
+        url: process.env.USERSERVERHOST
+      },
+    ],
+
+    MS_EXCEPT: [
+      "signin",
+      "signup",
+      "google",
+      "facebook",
+      "apple",
+      "/forgets/generates",
+      '/forgets/verifies',
+      '/forgets/confirms'
+    ],
+
+    REDIS_URL: process.env.REDISRATELIMITURL || "redis://127.0.0.1:6379",
   },
   production: {
     PORT: process.env.APPPORT || 8080,
