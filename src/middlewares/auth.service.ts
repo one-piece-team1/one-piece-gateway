@@ -36,8 +36,8 @@ export class AuthService implements NestMiddleware {
       if (response.statusCode !== 200) return res.sendStatus(403);
       next();
     } catch (error) {
-      this.logger.log(error.message);
-      return res.sendStatus(403);
+      this.logger.log(error.message, 'Auth-Err');
+      return res.status(403).json({ status: 'error', message: error.message });
     }
   }
 
@@ -70,14 +70,8 @@ export class AuthService implements NestMiddleware {
         json: true,
       });
     } catch (error) {
-      this.logger.log(error.message);
-      throw new HttpException(
-        {
-          status: HttpStatus.FORBIDDEN,
-          error: 'FORBIDDEN Request',
-        },
-        HttpStatus.FORBIDDEN,
-      );
+      this.logger.log(error.message, 'Auth-Request-Err');
+      throw new Error(error.message);
     }
   }
 }
