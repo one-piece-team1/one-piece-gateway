@@ -80,6 +80,16 @@ const configs = {
         host: process.env.USERSERVERHOST || '127.0.0.1',
         port: process.env.USERSERVERPORT || 7071,
       },
+      {
+        name: process.env.TRIPSERVER || 'one-piece-trip',
+        host: process.env.TRIPSERVERHOST || '127.0.0.1',
+        port: process.env.TRIPSERVERPORT || 7072
+      },
+      {
+        name: process.env.ARTICLEERVER || 'one-piece-article',
+        host: process.env.ARTICLEERVERHOST || '127.0.0.1',
+        port: process.env.ARTICLEERVERPORT || 7073
+      }
     ],
 
     MS_EXCEPT: [
