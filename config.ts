@@ -89,6 +89,11 @@ const configs = {
         name: process.env.ARTICLEERVER || 'one-piece-article',
         host: process.env.ARTICLEERVERHOST || '127.0.0.1',
         port: process.env.ARTICLEERVERPORT || 7073
+      },
+      {
+        name: process.env.LOCATIONERVER || 'one-piece-location',
+        host: process.env.LOCATIONERVERHOST || '127.0.0.1',
+        port: process.env.LOCATIONERVERPORT || 7074
       }
     ],
 
