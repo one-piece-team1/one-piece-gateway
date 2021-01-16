@@ -52,7 +52,7 @@ const configs = {
     NAME: packageNameGetter(),
     DESCRIPTION: packageDescriptionGetter(),
     // API
-    PREFIX: process.env.APPAPIPREFIX || 'v1.*',
+    PREFIX: process.env.APPAPIPREFIX || 'v1',
     VERSION: packageVersionGetter(),
     API_EXPLORER_PATH: process.env.APPAPIEXPLORERPATH || '/api',
     // Server Setting
@@ -74,15 +74,39 @@ const configs = {
       },
     },
 
-    DB_SETTINGS: {
-      host: process.env.DBHOST || 'localhost',
-      port: process.env.DBPORT || 5432,
-      username: process.env.DBUSERNAME || 'postgres',
-      password: process.env.DBPASSWORD || '123',
-      database: process.env.DBDATABASE || 'lib',
-      schema: process.env.DBSCHEMA || 'public',
-      gatewayTable: process.env.DBRATETABLE || 'gateway',
-    },
+    MS_SETTINGS: [
+      {
+        name: process.env.USERSERVER || 'one-piece-user',
+        host: process.env.USERSERVERHOST || '127.0.0.1',
+        port: process.env.USERSERVERPORT || 7071,
+      },
+      {
+        name: process.env.TRIPSERVER || 'one-piece-trip',
+        host: process.env.TRIPSERVERHOST || '127.0.0.1',
+        port: process.env.TRIPSERVERPORT || 7072
+      },
+      {
+        name: process.env.ARTICLEERVER || 'one-piece-article',
+        host: process.env.ARTICLEERVERHOST || '127.0.0.1',
+        port: process.env.ARTICLEERVERPORT || 7073
+      },
+      {
+        name: process.env.LOCATIONERVER || 'one-piece-location',
+        host: process.env.LOCATIONERVERHOST || '127.0.0.1',
+        port: process.env.LOCATIONERVERPORT || 7074
+      }
+    ],
+
+    MS_EXCEPT: [
+      "signin",
+      "signup",
+      "google",
+      "facebook",
+      "apple",
+      "/forgets/generates",
+      '/forgets/verifies',
+      '/forgets/confirms'
+    ],
 
     REDIS_URL: process.env.REDISRATELIMITURL || "redis://127.0.0.1:6379",
 
@@ -93,10 +117,10 @@ const configs = {
   },
   development: {},
   production: {
-    PORT: process.env.APPPORT || 7071,
+    PORT: process.env.APPPORT || 8080,
   },
   test: {
-    PORT: 7072,
+    PORT: 8080,
   },
 };
 
