@@ -159,6 +159,21 @@ export class GatewayService {
     );
 
     try {
+      if (req.headers['content-type'].includes('multipart/form-data')) {
+        return await APIRequestFactory.createRequest('standard').makeRequest({
+          url: `http://${service.host}:${service.port}${endpoint}`,
+          method: 'POST',
+          headers: {
+            'service-name': service.name,
+            Authorization: serviceToken,
+          },
+          body: {
+            ...req.body,
+            files: req['files'],
+          },
+          json: true,
+        });
+      }
       return await APIRequestFactory.createRequest('standard').makeRequest({
         url: `http://${service.host}:${service.port}${endpoint}`,
         method: 'POST',
