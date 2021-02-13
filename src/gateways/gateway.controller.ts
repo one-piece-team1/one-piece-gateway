@@ -8,9 +8,12 @@ import {
   Post,
   Put,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { GatewayService } from './gateway.service';
 import * as Express from 'express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { isImageFilter } from '../libs/utils';
 
 @Controller('/*')
 export class GatewayController {
@@ -26,6 +29,11 @@ export class GatewayController {
 
   @Post()
   @UsePipes(ValidationPipe)
+  @UseInterceptors(
+    FilesInterceptor('files', 5, {
+      fileFilter: isImageFilter,
+    }),
+  )
   postRequest(
     @Request() req: Express.Request,
   ): Promise<HttpException | unknown> {
