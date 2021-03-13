@@ -86,14 +86,19 @@ const configs = {
         port: process.env.TRIPSERVERPORT || 7072
       },
       {
-        name: process.env.ARTICLEERVER || 'one-piece-article',
-        host: process.env.ARTICLEERVERHOST || '127.0.0.1',
-        port: process.env.ARTICLEERVERPORT || 7073
+        name: process.env.ARTICLESERVER || 'one-piece-article',
+        host: process.env.ARTICLESERVERHOST || '127.0.0.1',
+        port: process.env.ARTICLESERVERPORT || 7073
       },
       {
-        name: process.env.LOCATIONERVER || 'one-piece-location',
-        host: process.env.LOCATIONERVERHOST || '127.0.0.1',
-        port: process.env.LOCATIONERVERPORT || 7074
+        name: process.env.LOCATIONSERVER || 'one-piece-location',
+        host: process.env.LOCATIONSERVERHOST || '127.0.0.1',
+        port: process.env.LOCATIONSERVERPORT || 7074
+      },
+      {
+        name: process.env.CHATSERVER || 'one-piece-chat',
+        host: process.env.CHATSERVERHOST || '127.0.0.1',
+        port: process.env.CHATSERVERPORT || 7075
       }
     ],
 
