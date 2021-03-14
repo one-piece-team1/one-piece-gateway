@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { config } from '../../config';
 import { APIRequestFactory } from '../libs/request-factory';
+import { ExceptionHandler } from '../libs/utils';
 import * as IGateway from './interfaces';
 
 @Injectable()
@@ -102,13 +103,7 @@ export class GatewayService {
         json: true,
       });
     } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new ExceptionHandler(error);
     }
   }
 
@@ -185,13 +180,7 @@ export class GatewayService {
         json: true,
       });
     } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new ExceptionHandler(error);
     }
   }
 
@@ -260,13 +249,7 @@ export class GatewayService {
         json: true,
       });
     } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new ExceptionHandler(error);
     }
   }
 
@@ -334,13 +317,7 @@ export class GatewayService {
         json: true,
       });
     } catch (error) {
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: error.message,
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new ExceptionHandler(error);
     }
   }
 }
