@@ -1,5 +1,6 @@
-import { Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { extname } from 'path';
+import * as IGateway from '../gateways/interfaces';
 
 /**
  * @description Check Memory Info
@@ -76,4 +77,33 @@ export function editFileName(req, file, cb) {
     .map(() => Math.round(Math.random() * 16).toString(16))
     .join('');
   cb(null, `${name}-${randomName}${fileExtName}`);
+}
+
+export function formatErrorMessage(
+  errorMsg: string,
+): IGateway.IErrorStruct | null {
+  const errorMsgStr: string = errorMsg.split('-')[1];
+  if (!errorMsgStr) return null;
+  errorMsgStr.replace(/\/\n/gi, '');
+  return isJsonString(errorMsgStr) ? JSON.parse(errorMsgStr) : null;
+}
+
+export function ExceptionHandler(error: Error): void {
+  const errorStruct: IGateway.IErrorStruct = formatErrorMessage(error.message);
+  if (!errorStruct) {
+    throw new HttpException(
+      {
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: error.message,
+      },
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
+  }
+  throw new HttpException(
+    {
+      status: errorStruct.statusCode,
+      error: errorStruct.message || errorStruct.error,
+    },
+    errorStruct.statusCode,
+  );
 }
