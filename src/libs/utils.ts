@@ -79,8 +79,10 @@ export function editFileName(req, file, cb) {
   cb(null, `${name}-${randomName}${fileExtName}`);
 }
 
-export function formatErrorMessage(errorMsg: string): IGateway.IErrorStruct | null {
-  let errorMsgStr: string = errorMsg.split('-')[1];
+export function formatErrorMessage(
+  errorMsg: string,
+): IGateway.IErrorStruct | null {
+  const errorMsgStr: string = errorMsg.split('-')[1];
   if (!errorMsgStr) return null;
   errorMsgStr.replace(/\/\n/gi, '');
   return isJsonString(errorMsgStr) ? JSON.parse(errorMsgStr) : null;
