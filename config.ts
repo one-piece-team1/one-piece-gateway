@@ -58,6 +58,7 @@ const configs = {
     // Server Setting
     HOST: process.env.APPHOST || 'localhost',
     PORT: process.env.APPPORT || 8080,
+    WSPORT: process.env.WSPORT || 84,
 
     EVENT_STORE_SETTINGS: {
       protocol: process.env.EVENTSTOREPROTOCOL || 'http',
