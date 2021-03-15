@@ -58,6 +58,7 @@
     "grpc": "^1.24.4",
     "ioredis": "^4.19.2",
     "lodash": "^4.17.20",
+    "node-rdkafka": "^2.10.1",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "request-promise": "^4.2.6",
