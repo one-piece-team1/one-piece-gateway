@@ -13,7 +13,7 @@ export class ChatSocketService {
    * @description Verify Identity
    * @public
    * @param {IChatRoom.ISocketWithIdentity} client
-   * @param {IChatRoom.IChatRoomEntity} chatRoom 
+   * @param {IChatRoom.IChatRoomEntity} chatRoom
    * @returns {boolean}
    */
   protected isRightClient(
