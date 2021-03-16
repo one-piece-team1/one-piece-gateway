@@ -13,6 +13,9 @@ export class ChatSocketGateway {
     this.init();
   }
 
+  /**
+   * @description Init func
+   */
   public init() {
     this.wss = new WebSocket.Server({ port: config.WSPORT, path: '/chats' });
     this.wss.on('connection', (ws: WebSocket, req: Express.Request) => {

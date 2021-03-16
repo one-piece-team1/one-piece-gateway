@@ -23,6 +23,9 @@ export class ChatConsumerService {
     this.init();
   }
 
+  /**
+   * @description Init func
+   */
   init() {
     this.consumer
       .on('ready', () => {

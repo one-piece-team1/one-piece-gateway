@@ -9,6 +9,13 @@ export class ChatSocketService {
 
   constructor(private readonly chatSocketGateway: ChatSocketGateway) {}
 
+  /**
+   * @description Verify Identity
+   * @public
+   * @param {IChatRoom.ISocketWithIdentity} client
+   * @param {IChatRoom.IChatRoomEntity} chatRoom 
+   * @returns {boolean}
+   */
   protected isRightClient(
     client: IChatRoom.ISocketWithIdentity,
     chatRoom: IChatRoom.IChatRoomEntity,
@@ -22,10 +29,17 @@ export class ChatSocketService {
     return isClient;
   }
 
+  /**
+   * @description send new chat room
+   * @public
+   * @param {EChatRoom.EChatRoomSocketEvent} type
+   * @param {IChatRoom.IChatRoomEntity} chatRoomEvent
+   * @returns {void}
+   */
   public sendNewChatRoom(
     type: EChatRoom.EChatRoomSocketEvent,
     chatRoomEvent: IChatRoom.IChatRoomEntity,
-  ) {
+  ): void {
     this.chatSocketGateway.wss.clients.forEach(
       (client: IChatRoom.ISocketWithIdentity) => {
         const isClient = this.isRightClient(client, chatRoomEvent);
