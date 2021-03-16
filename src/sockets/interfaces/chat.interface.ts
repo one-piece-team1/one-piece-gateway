@@ -1,3 +1,4 @@
+import WebSocket from 'ws';
 import * as EChatRoom from '../enums';
 
 interface IBaseTimeArea {
@@ -44,4 +45,8 @@ export interface IChatRoomEntity extends IBaseTimeArea {
   name: string;
   type: EChatRoom.EChatRoomType;
   participateId: IChatParticipateEntity;
+}
+
+export interface ISocketWithIdentity extends WebSocket {
+  uid: string;
 }

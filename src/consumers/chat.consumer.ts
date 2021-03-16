@@ -5,6 +5,7 @@ import {
   OnModuleInit,
 } from '@nestjs/common';
 import Kafka from 'node-rdkafka';
+import { ChatSocketService } from '../sockets/chat.service';
 import { config } from '../../config';
 
 @Injectable()
@@ -21,7 +22,7 @@ export class ChatConsumerService {
     },
   );
 
-  constructor() {
+  constructor(private readonly chatSocketService: ChatSocketService) {
     this.init();
   }
 
@@ -34,7 +35,9 @@ export class ChatConsumerService {
         }, 1000);
       })
       .on('data', data => {
-        console.log('data: ', JSON.parse(data.value.toString()));
+        this.chatSocketService.sendNewChatRoom(
+          JSON.parse(data.value.toString()),
+        );
         this.consumer.commit();
       })
       .on('event.error', err => {
