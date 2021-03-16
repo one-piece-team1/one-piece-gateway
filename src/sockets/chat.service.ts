@@ -1,12 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import WebSocket from 'ws';
 import { ChatSocketGateway } from './chat.gateway';
-import ChatRoomAggregate from './aggregates/chat-room.aggregate';
+import * as EChatRoom from './enums';
 import * as IChatRoom from './interfaces';
 
 @Injectable()
 export class ChatSocketService {
-  private readonly chatRoomAggregate = new ChatRoomAggregate();
   private readonly logger: Logger = new Logger('ChatSocketService');
 
   constructor(private readonly chatSocketGateway: ChatSocketGateway) {}
@@ -24,19 +22,19 @@ export class ChatSocketService {
     return isClient;
   }
 
-  public sendNewChatRoom(chatRoom: IChatRoom.IChatRoomEntity) {
+  public sendNewChatRoom(
+    type: EChatRoom.EChatRoomSocketEvent,
+    chatRoomEvent: IChatRoom.IChatRoomEntity,
+  ) {
     this.chatSocketGateway.wss.clients.forEach(
       (client: IChatRoom.ISocketWithIdentity) => {
-        const isClient = this.isRightClient(client, chatRoom);
+        const isClient = this.isRightClient(client, chatRoomEvent);
         if (isClient) {
-          client.send(
-            JSON.stringify(this.chatRoomAggregate.createChatRoom(chatRoom)),
-            err => {
-              if (err) {
-                this.logger.error(err.message, '', 'SendNewChatRoom');
-              }
-            },
-          );
+          client.send(JSON.stringify({ type, data: chatRoomEvent }), err => {
+            if (err) {
+              this.logger.error(err.message, '', 'SendNewChatRoom');
+            }
+          });
         }
       },
     );

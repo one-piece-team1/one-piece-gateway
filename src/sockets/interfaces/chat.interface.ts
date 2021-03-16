@@ -50,3 +50,9 @@ export interface IChatRoomEntity extends IBaseTimeArea {
 export interface ISocketWithIdentity extends WebSocket {
   uid: string;
 }
+
+export type IEventData =
+  | IChatEntity
+  | IChatParticipateEntity
+  | IChatRoomEntity
+  | ISocketWithIdentity;
