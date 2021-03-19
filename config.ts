@@ -58,6 +58,7 @@ const configs = {
     // Server Setting
     HOST: process.env.APPHOST || 'localhost',
     PORT: process.env.APPPORT || 8080,
+    WSPORT: process.env.WSPORT || 84,
 
     EVENT_STORE_SETTINGS: {
       protocol: process.env.EVENTSTOREPROTOCOL || 'http',
@@ -70,8 +71,17 @@ const configs = {
       },
       poolOptions: {
         min: process.env.EVENTSTOREPOOLOPTIONSMIN || 1,
-        max: process.env.EVENTSTOREPOOLOPTIONSMAX || 10,
+        max: process.env.EVENTSTOREPOOLOPTIONSMAX || 100,
       },
+      bootstrapServers: process.env.KAFKA_BOOTSTRAP_SERVERS || 'localhost:9094',
+      secureProtocol: process.env.KAFKA_SECURITY_PROTOCOL || 'SASL_SSL',
+      saslMechanisms: process.env.KAFKA_SASL_MECHANISMS || 'PLAIN',
+      chat: {
+        groupId: process.env.KAFKA_CHAT_CONSUMER_GROUP || 'onepiece-topic-chat-groups',
+      },
+      topics: {
+        chatTopic: process.env.KAFKA_CHAT_TOPIC || 'onepiece-topic-chat',
+      }
     },
 
     MS_SETTINGS: [
@@ -86,14 +96,19 @@ const configs = {
         port: process.env.TRIPSERVERPORT || 7072
       },
       {
-        name: process.env.ARTICLEERVER || 'one-piece-article',
-        host: process.env.ARTICLEERVERHOST || '127.0.0.1',
-        port: process.env.ARTICLEERVERPORT || 7073
+        name: process.env.ARTICLESERVER || 'one-piece-article',
+        host: process.env.ARTICLESERVERHOST || '127.0.0.1',
+        port: process.env.ARTICLESERVERPORT || 7073
       },
       {
-        name: process.env.LOCATIONERVER || 'one-piece-location',
-        host: process.env.LOCATIONERVERHOST || '127.0.0.1',
-        port: process.env.LOCATIONERVERPORT || 7074
+        name: process.env.LOCATIONSERVER || 'one-piece-location',
+        host: process.env.LOCATIONSERVERHOST || '127.0.0.1',
+        port: process.env.LOCATIONSERVERPORT || 7074
+      },
+      {
+        name: process.env.CHATSERVER || 'one-piece-chat',
+        host: process.env.CHATSERVERHOST || '127.0.0.1',
+        port: process.env.CHATSERVERPORT || 7075
       }
     ],
 
