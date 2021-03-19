@@ -17,4 +17,4 @@ COPY ./package.json ./
 RUN npm install
 COPY . .
 RUN npm run build
-EXPOSE 7070 8080
+EXPOSE 84 7070 8080

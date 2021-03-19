@@ -58,6 +58,7 @@ const configs = {
     // Server Setting
     HOST: process.env.APPHOST || 'localhost',
     PORT: process.env.APPPORT || 8080,
+    WSPORT: process.env.WSPORT || 84,
 
     EVENT_STORE_SETTINGS: {
       protocol: process.env.EVENTSTOREPROTOCOL || 'http',
@@ -70,8 +71,17 @@ const configs = {
       },
       poolOptions: {
         min: process.env.EVENTSTOREPOOLOPTIONSMIN || 1,
-        max: process.env.EVENTSTOREPOOLOPTIONSMAX || 10,
+        max: process.env.EVENTSTOREPOOLOPTIONSMAX || 100,
       },
+      bootstrapServers: process.env.KAFKA_BOOTSTRAP_SERVERS || 'localhost:9094',
+      secureProtocol: process.env.KAFKA_SECURITY_PROTOCOL || 'SASL_SSL',
+      saslMechanisms: process.env.KAFKA_SASL_MECHANISMS || 'PLAIN',
+      chat: {
+        groupId: process.env.KAFKA_CHAT_CONSUMER_GROUP || 'onepiece-topic-chat-groups',
+      },
+      topics: {
+        chatTopic: process.env.KAFKA_CHAT_TOPIC || 'onepiece-topic-chat',
+      }
     },
 
     MS_SETTINGS: [
