@@ -23,6 +23,7 @@ export class ChatSocketGateway {
         this.logger.log('Messaging is on');
       });
       this.logger.log('Connecting ws success');
+      // later add verification here
       const qs: url.UrlWithParsedQuery = url.parse(req.url, true);
       ws['uid'] = qs.query.userIds;
     });

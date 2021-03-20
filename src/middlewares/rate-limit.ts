@@ -47,9 +47,7 @@ export class RateMiddleware implements NestMiddleware {
 
           // get current counter
           const request_count_per_minutes = data.filter((item: IRateLimit) => {
-            const diff_time =
-              new Date(current_time).getTime() -
-              new Date(item.request_time).getTime();
+            const diff_time = new Date(current_time).getTime() - new Date(item.request_time).getTime();
             if (diff_time >= 60 * 1000) {
               item.request_time = new Date(current_time);
               item.counter = 0;
@@ -59,22 +57,20 @@ export class RateMiddleware implements NestMiddleware {
 
           // data handling to increment threshold
           let threshold = 0;
-          request_count_per_minutes.forEach(item => {
+          request_count_per_minutes.forEach((item) => {
             threshold += item.counter;
           });
 
           // rate exception
           if (threshold >= 100) {
             Logger.log(token, 'REDIS-RATE-LIMIT-ECEED', true);
-            return res
-              .status(429)
-              .json({ status: 'error', message: 'Throttle Limit Exceeded' });
+            return res.status(429).json({ status: 'error', message: 'Throttle Limit Exceeded' });
           }
 
           let is_found = false;
 
           // incrementation
-          data.forEach(element => {
+          data.forEach((element) => {
             if (element.request_time) {
               is_found = true;
               element.counter++;

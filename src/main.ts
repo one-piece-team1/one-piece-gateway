@@ -26,10 +26,6 @@ async function bootstrap() {
   });
   app.startAllMicroservices();
   await app.listen(config.PORT);
-  Logger.log(
-    `Server start on ${config.HOST}:${config.PORT}`,
-    'Bootstrap',
-    true,
-  );
+  Logger.log(`Server start on ${config.HOST}:${config.PORT}`, 'Bootstrap', true);
 }
 bootstrap();

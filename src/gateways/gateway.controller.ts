@@ -1,15 +1,4 @@
-import {
-  Controller,
-  Request,
-  Get,
-  UsePipes,
-  ValidationPipe,
-  HttpException,
-  Post,
-  Put,
-  Delete,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller, Request, Get, UsePipes, ValidationPipe, HttpException, Post, Put, Delete, UseInterceptors } from '@nestjs/common';
 import { GatewayService } from './gateway.service';
 import * as Express from 'express';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
@@ -21,9 +10,7 @@ export class GatewayController {
 
   @Get()
   @UsePipes(ValidationPipe)
-  getRequest(
-    @Request() req: Express.Request,
-  ): Promise<HttpException | unknown> {
+  getRequest(@Request() req: Express.Request): Promise<HttpException | unknown> {
     return this.gatewayService.getRequest(req);
   }
 
@@ -34,25 +21,19 @@ export class GatewayController {
       fileFilter: isImageFilter,
     }),
   )
-  postRequest(
-    @Request() req: Express.Request,
-  ): Promise<HttpException | unknown> {
+  postRequest(@Request() req: Express.Request): Promise<HttpException | unknown> {
     return this.gatewayService.postRequest(req);
   }
 
   @Put()
   @UsePipes(ValidationPipe)
-  putRequest(
-    @Request() req: Express.Request,
-  ): Promise<HttpException | unknown> {
+  putRequest(@Request() req: Express.Request): Promise<HttpException | unknown> {
     return this.gatewayService.putRequest(req);
   }
 
   @Delete()
   @UsePipes(ValidationPipe)
-  delRequest(
-    @Request() req: Express.Request,
-  ): Promise<HttpException | unknown> {
+  delRequest(@Request() req: Express.Request): Promise<HttpException | unknown> {
     return this.gatewayService.delRequest(req);
   }
 }

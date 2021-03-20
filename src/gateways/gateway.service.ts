@@ -72,9 +72,7 @@ export class GatewayService {
       );
 
     // get current server
-    const service: IGateway.IServerConf | undefined = config.MS_SETTINGS.find(
-      setting => setting.name === serviceName,
-    );
+    const service: IGateway.IServerConf | undefined = config.MS_SETTINGS.find((setting) => setting.name === serviceName);
 
     // check if service is exist or not
     if (typeof service !== 'object')
@@ -87,10 +85,7 @@ export class GatewayService {
       );
 
     // replace req.url to endpoint
-    const endpoint: string = req.url.replace(
-      `/${config.PREFIX}${config.API_EXPLORER_PATH}`,
-      '',
-    );
+    const endpoint: string = req.url.replace(`/${config.PREFIX}${config.API_EXPLORER_PATH}`, '');
 
     try {
       return await APIRequestFactory.createRequest('standard').makeRequest({
@@ -133,9 +128,7 @@ export class GatewayService {
       );
 
     // get current server
-    const service: IGateway.IServerConf | undefined = config.MS_SETTINGS.find(
-      setting => setting.name === serviceName,
-    );
+    const service: IGateway.IServerConf | undefined = config.MS_SETTINGS.find((setting) => setting.name === serviceName);
 
     // check if service is exist or not
     if (typeof service !== 'object')
@@ -148,10 +141,7 @@ export class GatewayService {
       );
 
     // replace req.url to endpoint
-    const endpoint: string = req.url.replace(
-      `/${config.PREFIX}${config.API_EXPLORER_PATH}`,
-      '',
-    );
+    const endpoint: string = req.url.replace(`/${config.PREFIX}${config.API_EXPLORER_PATH}`, '');
 
     try {
       if (req.headers['content-type'].includes('multipart/form-data')) {
@@ -217,9 +207,7 @@ export class GatewayService {
       );
 
     // get current server
-    const service: IGateway.IServerConf | undefined = config.MS_SETTINGS.find(
-      setting => setting.name === serviceName,
-    );
+    const service: IGateway.IServerConf | undefined = config.MS_SETTINGS.find((setting) => setting.name === serviceName);
 
     // check if service is exist or not
     if (typeof service !== 'object')
@@ -232,10 +220,7 @@ export class GatewayService {
       );
 
     // replace req.url to endpoint
-    const endpoint: string = req.url.replace(
-      `/${config.PREFIX}${config.API_EXPLORER_PATH}`,
-      '',
-    );
+    const endpoint: string = req.url.replace(`/${config.PREFIX}${config.API_EXPLORER_PATH}`, '');
 
     try {
       return await APIRequestFactory.createRequest('standard').makeRequest({
@@ -286,9 +271,7 @@ export class GatewayService {
       );
 
     // get current server
-    const service: IGateway.IServerConf | undefined = config.MS_SETTINGS.find(
-      setting => setting.name === serviceName,
-    );
+    const service: IGateway.IServerConf | undefined = config.MS_SETTINGS.find((setting) => setting.name === serviceName);
 
     // check if service is exist or not
     if (typeof service !== 'object')
@@ -301,10 +284,7 @@ export class GatewayService {
       );
 
     // replace req.url to endpoint
-    const endpoint: string = req.url.replace(
-      `/${config.PREFIX}${config.API_EXPLORER_PATH}`,
-      '',
-    );
+    const endpoint: string = req.url.replace(`/${config.PREFIX}${config.API_EXPLORER_PATH}`, '');
 
     try {
       return await APIRequestFactory.createRequest('standard').makeRequest({
