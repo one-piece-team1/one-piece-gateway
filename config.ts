@@ -40,6 +40,17 @@ const packageDescriptionGetter = (): string => {
     : 'service evaluate open api';
 };
 
+/**
+ * @description Cors white lists
+ * @private
+ * @param {string} env
+ * @returns {boolean | string[]}
+ */
+const corsWhiteLists = (env: string): boolean | string[] => {
+  if (env === 'producion' || env === 'stage') return [process.env.WEBDOMAIN, process.env.IOSDOMAIN, process.env.ANDRIODDOMAIN];
+  return true;
+}
+
 // load config
 dotenv.config();
 
@@ -59,6 +70,7 @@ const configs = {
     HOST: process.env.APPHOST || 'localhost',
     PORT: process.env.APPPORT || 8080,
     WSPORT: process.env.WSPORT || 84,
+    CORSORIGIN: corsWhiteLists(env),
 
     EVENT_STORE_SETTINGS: {
       protocol: process.env.EVENTSTOREPROTOCOL || 'http',
