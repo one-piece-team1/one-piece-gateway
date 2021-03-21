@@ -19,7 +19,7 @@ export interface IUserEntity extends IBaseTimeArea {
   age?: number;
   desc?: string;
   profileImage?: string;
-  chatParticipateIds: IChatParticipateEntity[];
+  chatParticipates: IChatParticipateEntity[];
   followers: IUserEntity[];
   followings: IUserEntity[];
   blockLists: IUserEntity[];
@@ -30,29 +30,27 @@ export interface IUserEntity extends IBaseTimeArea {
 export interface IChatEntity extends IBaseTimeArea {
   id: string;
   message: string;
-  chatParticipateId: IChatParticipateEntity;
+  sendStatus: 'fail' | 'sending' | 'finish';
+  readStatus: 'read' | 'unread';
+  chatParticipate: IChatParticipateEntity;
 }
 
 export interface IChatParticipateEntity extends IBaseTimeArea {
   id: string;
-  chatRoomId: IChatRoomEntity;
-  messageIds: IChatEntity[];
-  userIds: IUserEntity[];
+  chatRoom: IChatRoomEntity;
+  chats: IChatEntity[];
+  users: IUserEntity[];
 }
 
 export interface IChatRoomEntity extends IBaseTimeArea {
   id: string;
   name: string;
   type: EChatRoom.EChatRoomType;
-  participateId: IChatParticipateEntity;
+  chatParticipate: IChatParticipateEntity;
 }
 
 export interface ISocketWithIdentity extends WebSocket {
   uid: string;
 }
 
-export type IEventData =
-  | IChatEntity
-  | IChatParticipateEntity
-  | IChatRoomEntity
-  | ISocketWithIdentity;
+export type IEventData = IChatEntity | IChatParticipateEntity | IChatRoomEntity | ISocketWithIdentity;

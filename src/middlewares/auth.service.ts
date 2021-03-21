@@ -1,11 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  Logger,
-  NestMiddleware,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { config } from '../../config';
 import { APIRequestFactory } from '../libs/request-factory';
@@ -21,11 +14,7 @@ export class AuthService implements NestMiddleware {
    * @param {NextFunction} next
    * @returns {Promise<void | Response>}
    */
-  public async use(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void | Response> {
+  public async use(req: Request, res: Response, next: NextFunction): Promise<void | Response> {
     // check if routes is exception or not
     if (this.exceptRoutes(req.baseUrl)) return next();
     // check token
