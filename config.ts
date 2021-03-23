@@ -47,7 +47,7 @@ const packageDescriptionGetter = (): string => {
  * @returns {boolean | string[]}
  */
 const corsWhiteLists = (env: string): boolean | string[] => {
-  if (env === 'producion' || env === 'stage') return [process.env.WEBDOMAIN, process.env.IOSDOMAIN, process.env.ANDRIODDOMAIN];
+  if (env === 'production' || env === 'stage') return [process.env.WEBDOMAIN, process.env.IOSDOMAIN, process.env.ANDRIODDOMAIN];
   return true;
 }
 

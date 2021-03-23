@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { Transport } from '@nestjs/microservices';
 import helmet from 'helmet';
+import morgan from 'morgan';
 import { AppModule } from './app.module';
 import { config } from '../config';
 
@@ -11,7 +12,11 @@ async function bootstrap() {
   app.connectMicroservice({
     transport: Transport.TCP,
   });
-
+  app.use(
+    morgan('combined', {
+      skip: (req, res) => res.statusCode < 400,
+    }),
+  );
   app.useGlobalPipes(
     new ValidationPipe({
       skipMissingProperties: true,
