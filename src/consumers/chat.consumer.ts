@@ -17,9 +17,7 @@ export class ChatConsumerService {
     },
   );
 
-  constructor(
-    private readonly chatMessageRoutingService: ChatMessageRoutingService,
-  ) {
+  constructor(private readonly chatMessageRoutingService: ChatMessageRoutingService) {
     this.init();
   }
 
@@ -34,14 +32,14 @@ export class ChatConsumerService {
           this.consumer.consume(config.EVENT_STORE_SETTINGS.poolOptions.max);
         }, 1000);
       })
-      .on('data', data => {
+      .on('data', (data) => {
         this.chatMessageRoutingService.register(data);
         this.consumer.commit();
       })
-      .on('event.error', err => {
+      .on('event.error', (err) => {
         this.logger.error(err.message, '', 'Event_Error');
       })
-      .on('rebalance.error', err => {
+      .on('rebalance.error', (err) => {
         this.logger.error(err.message, '', 'Reblanace_Error');
       });
 

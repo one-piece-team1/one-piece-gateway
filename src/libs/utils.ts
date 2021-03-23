@@ -9,13 +9,7 @@ import * as IGateway from '../gateways/interfaces';
  * @returns {void}
  */
 export function memInfo(memName: string): void {
-  Logger.log(
-    `Function ${memName} used memory: ${Math.round(
-      (process.memoryUsage().heapUsed / 1024 / 1024) * 100,
-    ) / 100} MB`,
-    'Memory-Info',
-    true,
-  );
+  Logger.log(`Function ${memName} used memory: ${Math.round((process.memoryUsage().heapUsed / 1024 / 1024) * 100) / 100} MB`, 'Memory-Info', true);
 }
 
 /**
@@ -64,8 +58,7 @@ export function isEmptyObj(obj: { [key: string]: any }): boolean {
 }
 
 export function isImageFilter(req, file, cb) {
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/))
-    return cb(new Error('Not Allowed File'), false);
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) return cb(new Error('Not Allowed File'), false);
   cb(null, true);
 }
 
@@ -79,9 +72,7 @@ export function editFileName(req, file, cb) {
   cb(null, `${name}-${randomName}${fileExtName}`);
 }
 
-export function formatErrorMessage(
-  errorMsg: string,
-): IGateway.IErrorStruct | null {
+export function formatErrorMessage(errorMsg: string): IGateway.IErrorStruct | null {
   const errorMsgStr: string = errorMsg.split('-')[1];
   if (!errorMsgStr) return null;
   errorMsgStr.replace(/\/\n/gi, '');
