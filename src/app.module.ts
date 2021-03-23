@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { GatewayModule } from './gateways/gateway.module';
-import { RateMiddleware } from 'middlewares/rate-limit';
+import { RateMiddleware } from './middlewares/rate-limit';
+import { AuthMiddleware } from './middlewares/auth.service';
 import { ChatSocketGateway } from './sockets/chat.gateway';
 import { ChatSocketService } from './sockets/chat.service';
 import { ChatConsumerService } from './consumers/chat.consumer';
@@ -13,5 +14,6 @@ import { ChatMessageRoutingService } from './handlers/chat.handler';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(RateMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
+    consumer.apply(AuthMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }
