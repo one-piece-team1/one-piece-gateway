@@ -1,16 +1,22 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestFastifyApplication } from '@nestjs/platform-fastify';
+import { Transport } from '@nestjs/microservices';
+import helmet from 'helmet';
+import morgan from 'morgan';
 import { AppModule } from './app.module';
 import { config } from '../config';
-import { Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule);
   app.connectMicroservice({
     transport: Transport.TCP,
   });
-
+  app.use(
+    morgan('combined', {
+      skip: (req, res) => res.statusCode < 400,
+    }),
+  );
   app.useGlobalPipes(
     new ValidationPipe({
       skipMissingProperties: true,
@@ -21,9 +27,11 @@ async function bootstrap() {
   app.setGlobalPrefix(`${config.PREFIX}${config.API_EXPLORER_PATH}`);
   app.enableCors({
     credentials: true,
-    origin: true,
+    origin: config.CORSORIGIN,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    preflightContinue: true,
   });
+  app.use(helmet());
   app.startAllMicroservices();
   await app.listen(config.PORT);
   Logger.log(`Server start on ${config.HOST}:${config.PORT}`, 'Bootstrap', true);
