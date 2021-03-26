@@ -93,6 +93,7 @@ const configs = {
       },
       topics: {
         chatTopic: process.env.KAFKA_CHAT_TOPIC || 'onepiece-topic-chat',
+        chatEventTopic: process.env.KAFKA_CHAT_EVENT_TOPIC || 'onepiece-topic-chat-event',
       }
     },
 
