@@ -1,5 +1,5 @@
 import * as EChatEvt from '../enums';
-
+import * as IAuth from '../../auth/interfaces';
 export interface IResponseWithPk {
   id: string;
 }
@@ -10,6 +10,10 @@ export interface IEventAggregateResponse<T, K> extends IResponseWithPk {
 }
 
 export interface IUpdateChatStatusEvt {
-  type: EChatEvt.EChatSendStatus | EChatEvt.EChatStatus;
-  participateId: string;
+  sendStatus?: EChatEvt.EChatSendStatus;
+  readStatus?: EChatEvt.EChatStatus;
+  participateId?: string;
+  chatId?: string;
+  requestUserId: string;
+  user: IAuth.JwtPayload;
 }

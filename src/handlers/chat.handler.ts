@@ -34,6 +34,10 @@ export class ChatMessageRoutingService {
         return this.chatSocketService.sendNewChatRoom(event.type, event.data as IChatRoom.IChatRoomEntity);
       case EChatRoom.EChatRoomSocketEvent.NEWCHATMESSAGE:
         return this.chatSocketService.sendNewChatMessage(event.type, event.data as IChatRoom.IChatEntity);
+      case EChatRoom.EChatRoomSocketEvent.UPDATEREADSTATUSMSG:
+        return this.chatSocketService.sendNewChatReadStatus(event.type, event.data as IChatRoom.IChatEntity);
+      case EChatRoom.EChatRoomSocketEvent.UPDATESENDSTATUSMSG:
+        return this.chatSocketService.sendNewChatSendStatus(event.type, event.data as IChatRoom.IChatEntity);
     }
   }
 }
