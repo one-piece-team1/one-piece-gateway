@@ -47,7 +47,7 @@ export class ChatSocketGateway {
         ws['uid'] = payload.id;
         ws.on('message', (message: string) => {
           this.logger.log('Messaging is on');
-          this.chatEventRoutingService.register(message);
+          this.chatEventRoutingService.register(message, payload);
         });
         this.logger.log('Connecting ws success');
       }

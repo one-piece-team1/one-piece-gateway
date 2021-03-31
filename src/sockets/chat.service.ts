@@ -73,4 +73,36 @@ export class ChatSocketService {
       }
     });
   }
+
+  /**
+   * @description send new chat read status
+   * @public
+   * @param {EChatRoom.EChatRoomSocketEvent} type
+   * @param {IChatRoom.IChatRoomEntity} msgEvent
+   * @returns {void}
+   */
+  public sendNewChatReadStatus(type: EChatRoom.EChatRoomSocketEvent, msgEvent: IChatRoom.IChatEntity): void {
+    this.chatSocketGateway.wss.clients.forEach((client: IChatRoom.ISocketWithIdentity) => {
+      const isClient = this.isRightClient(client, msgEvent);
+      if (isClient) {
+        this.sendEvent<EChatRoom.EChatRoomSocketEvent, IChatRoom.IChatEntity>(client, type, msgEvent);
+      }
+    });
+  }
+
+  /**
+   * @description send new chat send status
+   * @public
+   * @param {EChatRoom.EChatRoomSocketEvent} type
+   * @param {IChatRoom.IChatRoomEntity} msgEvent
+   * @returns {void}
+   */
+  public sendNewChatSendStatus(type: EChatRoom.EChatRoomSocketEvent, msgEvent: IChatRoom.IChatEntity): void {
+    this.chatSocketGateway.wss.clients.forEach((client: IChatRoom.ISocketWithIdentity) => {
+      const isClient = this.isRightClient(client, msgEvent);
+      if (isClient) {
+        this.sendEvent<EChatRoom.EChatRoomSocketEvent, IChatRoom.IChatEntity>(client, type, msgEvent);
+      }
+    });
+  }
 }

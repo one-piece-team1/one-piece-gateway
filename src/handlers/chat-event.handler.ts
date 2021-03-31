@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common
 import Kafka from 'node-rdkafka';
 import { ChatEventProudcerService } from '../producers/chatevent.producer';
 import { ChatEventAggregate } from '../aggregates/chat-event.aggregate';
+import * as IAuth from '../auth/interfaces';
 import * as EChatEvt from '../aggregates/enums';
 import * as IChatEvt from '../aggregates/interfaces';
 import { config } from '../../config';
@@ -18,9 +19,10 @@ export class ChatEventRoutingService {
    * @param {string} socketMessage
    * @returns {void}
    */
-  public register(socketMessage: string): void {
+  public register(socketMessage: string, payload: IAuth.JwtPayload): void {
     if (!socketMessage) throw new InternalServerErrorException('Non socket message is being proecssed');
     const event: IChatEvt.IEventAggregateResponse<EChatEvt.EChatEeventFromSocket, IChatEvt.IUpdateChatStatusEvt> = JSON.parse(socketMessage);
+    event.data.user = payload;
     return this.handler(event);
   }
 
