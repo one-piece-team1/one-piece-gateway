@@ -72,6 +72,11 @@ const configs = {
     WSPORT: process.env.WSPORT || 84,
     CORSORIGIN: corsWhiteLists(env),
 
+    JWT: {
+      KEY: process.env.JWTKEY || 'lib',
+      SECRET: process.env.JWTSECRET || 'lib',
+    },
+
     EVENT_STORE_SETTINGS: {
       protocol: process.env.EVENTSTOREPROTOCOL || 'http',
       hostname: process.env.EVENTSTOREHOSTNAME || '0.0.0.0',
@@ -93,6 +98,7 @@ const configs = {
       },
       topics: {
         chatTopic: process.env.KAFKA_CHAT_TOPIC || 'onepiece-topic-chat',
+        chatEventTopic: process.env.KAFKA_CHAT_EVENT_TOPIC || 'onepiece-topic-chat-event',
       }
     },
 
