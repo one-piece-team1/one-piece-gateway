@@ -3,6 +3,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Request } from 'express';
 import { AddRestEventCMD } from './domains/rest-event/commands/add-rest-event.cmd';
 import { APIRequestFactory } from '../libs/request-factory';
+import { GeneralPublishersFactory } from '../publishers';
 import { ExceptionHandler } from '../libs/utils';
 import * as IGateway from './interfaces';
 import { config } from '../../config';
@@ -151,8 +152,13 @@ export class GatewayService {
     const files = req['files'] ? [req['files']] : [];
 
     try {
-      const event = await this.comandBus.execute(new AddRestEventCMD(endpoint, [req.headers], [req.query], [req.params], [req.body], files, [req.cookies]));
-      this.logger.log(JSON.stringify(event), 'POST-EVENT-VAL');
+      if (req.query.type === 'async') {
+        console.log('req.: ', req);
+        const event = await this.comandBus.execute(new AddRestEventCMD(endpoint, [req.headers], [req.query], [req.params], [req.body], files, [req.cookies]));
+        this.logger.log(JSON.stringify(event), 'POST-EVENT-VAL');
+        await GeneralPublishersFactory.createPub(event, req.query.exchange as string);
+        return event;
+      }
       if (req.headers['content-type'].includes('multipart/form-data')) {
         return await APIRequestFactory.createRequest('standard').makeRequest({
           url: `http://${service.host}:${service.port}${endpoint}`,
@@ -232,6 +238,13 @@ export class GatewayService {
     const endpoint: string = req.url.replace(`/${config.PREFIX}${config.API_EXPLORER_PATH}`, '');
 
     try {
+      if (req.query.type === 'async') {
+        console.log('req.: ', req);
+        const event = await this.comandBus.execute(new AddRestEventCMD(endpoint, [req.headers], [req.query], [req.params], [req.body], [], [req.cookies]));
+        this.logger.log(JSON.stringify(event), 'PUT-EVENT-VAL');
+        await GeneralPublishersFactory.createPub(event, req.query.exchange as string);
+        return event;
+      }
       return await APIRequestFactory.createRequest('standard').makeRequest({
         url: `http://${service.host}:${service.port}${endpoint}`,
         method: 'PUT',

@@ -3,8 +3,8 @@ import { config } from '../../config';
 
 export const eventStoreConfig: PostgresConnectionOptions = {
   type: 'postgres',
-  host: config.EVENT_STORE_SETTINGS.hostname,
-  port: config.EVENT_STORE_SETTINGS.tcpPort,
+  host: config.EVENT_STORE_SETTINGS.dbHost,
+  port: config.EVENT_STORE_SETTINGS.dbPort,
   username: config.EVENT_STORE_SETTINGS.username,
   password: config.EVENT_STORE_SETTINGS.password,
   database: config.EVENT_STORE_SETTINGS.database,
