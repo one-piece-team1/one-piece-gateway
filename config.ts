@@ -82,6 +82,11 @@ const configs = {
       hostname: process.env.EVENTSTOREHOSTNAME || '0.0.0.0',
       tcpPort: process.env.EVENTSTORETCPPORT || 1113,
       httpPort: process.env.EVENTSTOREHTTPPORT || 2113,
+      username: process.env.EVENTSTOREUSERNAME || 'postgres',
+      password: process.env.EVENTSTOREPASSWORD || '123',
+      database: process.env.EVENTSTOREDATABASE || 'onepiece',
+      schema: process.env.EVENTSTORESCHEMA || 'public',
+      userTable: process.env.EVENTSTOREUSERTABLE || 'event_store_gateway',
       credentials: {
         username: process.env.EVENTSTORECREDENTIALSUSERNAME || 'lib-test',
         password: process.env.EVENTSTORECREDENTIALSPASSWORD || '12345678',

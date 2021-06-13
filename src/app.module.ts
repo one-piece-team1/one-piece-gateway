@@ -1,5 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
+import EventStoreDBModule from './databases/event-store-db.module';
 import { GatewayModule } from './gateways/gateway.module';
 import { RateMiddleware } from './middlewares/rate-limit';
 import { AuthMiddleware } from './middlewares/auth.service';
@@ -11,6 +12,7 @@ import { ChatEventProudcerService } from './producers/chatevent.producer';
 import { ChatMessageRoutingService } from './handlers/chat.handler';
 import { ChatEventRoutingService } from './handlers/chat-event.handler';
 import { ChatEventAggregate } from './aggregates/chat-event.aggregate';
+import { EventStoreDBProvider } from './databases/event-store-db.provider';
 import { config } from './../config';
 
 @Module({
@@ -27,9 +29,11 @@ import { config } from './../config';
         issuer: 'one-piece',
       },
     }),
+    EventStoreDBModule,
     GatewayModule,
   ],
-  providers: [AutheSerivce, ChatSocketGateway, ChatSocketService, ChatConsumerService, ChatMessageRoutingService, ChatEventRoutingService, ChatEventProudcerService, ChatEventAggregate],
+  providers: [AutheSerivce, ChatSocketGateway, ChatSocketService, ChatConsumerService, ChatMessageRoutingService, ChatEventRoutingService, ChatEventProudcerService, ChatEventAggregate, ...EventStoreDBProvider],
+  exports: [...EventStoreDBProvider],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

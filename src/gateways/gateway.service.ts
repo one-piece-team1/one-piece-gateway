@@ -1,5 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Request } from 'express';
+import { AddRestEventCMD } from './domains/rest-event/commands/add-rest-event.cmd';
 import { APIRequestFactory } from '../libs/request-factory';
 import { ExceptionHandler } from '../libs/utils';
 import * as IGateway from './interfaces';
@@ -7,6 +9,10 @@ import { config } from '../../config';
 
 @Injectable()
 export class GatewayService {
+  private readonly logger: Logger = new Logger('GatewayService');
+
+  constructor(private readonly comandBus: CommandBus, private readonly queryBus: QueryBus) {}
+
   /**
    * @description Check if it's third party routes
    * @protected
@@ -142,8 +148,11 @@ export class GatewayService {
 
     // replace req.url to endpoint
     const endpoint: string = req.url.replace(`/${config.PREFIX}${config.API_EXPLORER_PATH}`, '');
+    const files = req['files'] ? [req['files']] : [];
 
     try {
+      const event = await this.comandBus.execute(new AddRestEventCMD(endpoint, [req.headers], [req.query], [req.params], [req.body], files, [req.cookies]));
+      this.logger.log(JSON.stringify(event), 'POST-EVENT-VAL');
       if (req.headers['content-type'].includes('multipart/form-data')) {
         return await APIRequestFactory.createRequest('standard').makeRequest({
           url: `http://${service.host}:${service.port}${endpoint}`,
