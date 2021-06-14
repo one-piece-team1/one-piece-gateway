@@ -103,9 +103,17 @@ const configs = {
       chat: {
         groupId: process.env.KAFKA_CHAT_CONSUMER_GROUP || 'onepiece-topic-chat-groups',
       },
+      gateway: {
+        groupId: process.env.KAFKA_GATEWAY_CONSUMER_GROUP || 'onepiece-topic-gateway-groups',
+      },
+      user: {
+        groupId: process.env.KAFKA_USER_CONSUMER_GROUP || 'onepiece-topic-user-groups',
+      },
       topics: {
         chatTopic: process.env.KAFKA_CHAT_TOPIC || 'onepiece-topic-chat',
         chatEventTopic: process.env.KAFKA_CHAT_EVENT_TOPIC || 'onepiece-topic-chat-event',
+        gateWayEvent: process.env.KAFKA_GATEWAY_EVENT_TOPIC || 'onepiece-gateway-event',
+        userEvent: process.env.KAFKA_USER_EVENT_TOPIC || 'onepiece-user-event',
       }
     },
 

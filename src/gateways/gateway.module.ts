@@ -7,10 +7,11 @@ import { GatewayService } from './gateway.service';
 import { RestEventStoreProvider } from './domains/rest-event/providers/rest-event.provider';
 import { RestEventStoreHandlers } from './domains/rest-event/commands/handlers';
 import RestEventStoreRepository from './domains/rest-event/stores/rest-event.store';
+import { GatewayKafkaProudcerService } from '../producers/restevent.producer';
 
 @Module({
   imports: [MulterModule.register(), CqrsModule, EventStoreDBModule],
   controllers: [GatewayController],
-  providers: [...RestEventStoreHandlers, RestEventStoreRepository, ...RestEventStoreProvider, GatewayService],
+  providers: [...RestEventStoreHandlers, RestEventStoreRepository, ...RestEventStoreProvider, GatewayService, GatewayKafkaProudcerService],
 })
 export class GatewayModule {}
