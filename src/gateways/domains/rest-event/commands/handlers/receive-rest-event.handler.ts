@@ -1,22 +1,21 @@
 import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler, EventPublisher } from '@nestjs/cqrs';
-import { AddRestEventCMD } from '../add-rest-event.cmd';
+import { ReceiveRestEventCMD } from '../receive-rest-event.cmd';
 import RestEventStoreRepository from '../../stores/rest-event.store';
 import { RestEvent } from '../../entites/rest-event.entity';
 import { ReceiveRestEventAggregate } from '../../aggregates/receive-rest-event.aggregate';
 
-@CommandHandler(AddRestEventCMD)
-export class ReceiveRestEventHandler implements ICommandHandler<AddRestEventCMD> {
+@CommandHandler(ReceiveRestEventCMD)
+export class ReceiveRestEventHandler implements ICommandHandler<ReceiveRestEventCMD> {
   private readonly logger: Logger = new Logger('ReceiveRestEventHandler');
 
   public constructor(private readonly restEventStoreRepository: RestEventStoreRepository, private readonly eventPublisher: EventPublisher) {}
 
-  public async execute(cmd: AddRestEventCMD): Promise<RestEvent> {
+  public async execute(cmd: ReceiveRestEventCMD): Promise<RestEvent> {
     this.logger.log(JSON.stringify(cmd), 'Execute-Content');
-    const event = new RestEvent();
-    Object.assign(event, cmd);
+    Object.assign(cmd, { status: true });
     try {
-      const receiveEvent = await this.restEventStoreRepository.register(event);
+      const receiveEvent = await this.restEventStoreRepository.register(cmd as RestEvent, cmd.id);
       if (receiveEvent instanceof Error) {
         throw receiveEvent;
       }

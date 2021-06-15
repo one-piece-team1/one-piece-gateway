@@ -28,4 +28,7 @@ export class RestEvent {
 
   @Column({ type: 'jsonb', nullable: true })
   cookies?: Array<any>;
+
+  @Column({ type: 'jsonb', nullable: true })
+  response?: Array<any>;
 }

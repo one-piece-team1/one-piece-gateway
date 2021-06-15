@@ -13,8 +13,6 @@ import { ChatMessageRoutingService } from './handlers/chat.handler';
 import { ChatEventRoutingService } from './handlers/chat-event.handler';
 import { ChatEventAggregate } from './aggregates/chat-event.aggregate';
 import { EventStoreDBProvider } from './databases/event-store-db.provider';
-import { GatewayKafkaProudcerService } from './producers/restevent.producer';
-import { GatewayKakfaConsumerService } from './consumers/restevent.consumer';
 import { config } from './../config';
 
 @Module({
@@ -34,7 +32,7 @@ import { config } from './../config';
     EventStoreDBModule,
     GatewayModule,
   ],
-  providers: [AutheSerivce, ChatSocketGateway, ChatSocketService, ChatConsumerService, ChatMessageRoutingService, ChatEventRoutingService, ChatEventProudcerService, ChatEventAggregate, ...EventStoreDBProvider, GatewayKafkaProudcerService, GatewayKakfaConsumerService],
+  providers: [AutheSerivce, ChatSocketGateway, ChatSocketService, ChatConsumerService, ChatMessageRoutingService, ChatEventRoutingService, ChatEventProudcerService, ChatEventAggregate, ...EventStoreDBProvider],
   exports: [...EventStoreDBProvider],
 })
 export class AppModule implements NestModule {

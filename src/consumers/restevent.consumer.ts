@@ -1,5 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
 import Kafka from 'node-rdkafka';
+import { ReceiveRestEventCMD } from '../gateways/domains/rest-event/commands/receive-rest-event.cmd';
+import * as IGateway from '../gateways/interfaces';
 import { config } from '../../config';
 
 @Injectable()
@@ -16,7 +19,7 @@ export class GatewayKakfaConsumerService {
     },
   );
 
-  constructor() {
+  constructor(private readonly commandBus: CommandBus) {
     this.init();
   }
 
@@ -33,6 +36,7 @@ export class GatewayKakfaConsumerService {
       })
       .on('data', (data) => {
         this.logger.log(JSON.parse(data.value.toString()), 'Check');
+        this.register(data);
         this.consumer.commit();
       })
       .on('event.error', (err) => {
@@ -47,5 +51,11 @@ export class GatewayKakfaConsumerService {
         this.logger.error(err.message, '', 'ConsumerConnectError');
       }
     });
+  }
+
+  private register(kafkaMsg: Kafka.Message) {
+    const kafkaEvt = kafkaMsg.value.toString();
+    const jsonEvent: IGateway.IRestEventResponseCommand = JSON.parse(kafkaEvt);
+    this.commandBus.execute(new ReceiveRestEventCMD(jsonEvent.requestId, [jsonEvent.response]));
   }
 }

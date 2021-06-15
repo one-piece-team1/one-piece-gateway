@@ -8,6 +8,6 @@ export class ReceiveRestEventAggregate extends AggregateRoot {
   }
 
   public regsiterEvent(event: RestEvent) {
-    this.apply(new ReceiveRestEventCMD(event.id, event.path, event.headers, event.querys, event.params, event.body, event.files, event.cookies));
+    this.apply(new ReceiveRestEventCMD(event.id, event.response));
   }
 }
