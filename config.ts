@@ -78,10 +78,17 @@ const configs = {
     },
 
     EVENT_STORE_SETTINGS: {
-      protocol: process.env.EVENTSTOREPROTOCOL || 'http',
-      hostname: process.env.EVENTSTOREHOSTNAME || '0.0.0.0',
-      tcpPort: process.env.EVENTSTORETCPPORT || 1113,
+      protocol: process.env.EVENTSTOREPROTOCOL || 'amqp',
+      hostname: process.env.EVENTSTOREHOSTNAME || 'localhost',
+      tcpPort: process.env.EVENTSTORETCPPORT || 5672,
+      dbHost: process.env.EVENTSTOREHOSTNAME || '0.0.0.0',
+      dbPort: process.env.EVENTSTOREDBPORT || 1113,
       httpPort: process.env.EVENTSTOREHTTPPORT || 2113,
+      username: process.env.EVENTSTOREUSERNAME || 'postgres',
+      password: process.env.EVENTSTOREPASSWORD || '123',
+      database: process.env.EVENTSTOREDATABASE || 'onepiece',
+      schema: process.env.EVENTSTORESCHEMA || 'public',
+      userTable: process.env.EVENTSTOREUSERTABLE || 'event_store_gateway',
       credentials: {
         username: process.env.EVENTSTORECREDENTIALSUSERNAME || 'lib-test',
         password: process.env.EVENTSTORECREDENTIALSPASSWORD || '12345678',
@@ -96,9 +103,17 @@ const configs = {
       chat: {
         groupId: process.env.KAFKA_CHAT_CONSUMER_GROUP || 'onepiece-topic-chat-groups',
       },
+      gateway: {
+        groupId: process.env.KAFKA_GATEWAY_CONSUMER_GROUP || 'onepiece-topic-gateway-groups',
+      },
+      user: {
+        groupId: process.env.KAFKA_USER_CONSUMER_GROUP || 'onepiece-topic-user-groups',
+      },
       topics: {
         chatTopic: process.env.KAFKA_CHAT_TOPIC || 'onepiece-topic-chat',
         chatEventTopic: process.env.KAFKA_CHAT_EVENT_TOPIC || 'onepiece-topic-chat-event',
+        gateWayEvent: process.env.KAFKA_GATEWAY_EVENT_TOPIC || 'onepiece-gateway-event',
+        userEvent: process.env.KAFKA_USER_EVENT_TOPIC || 'onepiece-user-event',
       }
     },
 

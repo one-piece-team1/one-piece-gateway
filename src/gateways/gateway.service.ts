@@ -1,12 +1,24 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Request } from 'express';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { Request, Response } from 'express';
+import { AddRestEventCMD } from './domains/rest-event/commands/add-rest-event.cmd';
 import { APIRequestFactory } from '../libs/request-factory';
+import { GeneralPublishersFactory } from '../publishers';
+import { GatewayKafkaProudcerService } from '../producers/restevent.producer';
 import { ExceptionHandler } from '../libs/utils';
 import * as IGateway from './interfaces';
 import { config } from '../../config';
 
+enum APIEvent {
+  'USERAPI' = '/users',
+}
+
 @Injectable()
 export class GatewayService {
+  private readonly logger: Logger = new Logger('GatewayService');
+
+  constructor(private readonly comandBus: CommandBus, private readonly gatewayKafkaProudcerService: GatewayKafkaProudcerService, private readonly queryBus: QueryBus) {}
+
   /**
    * @description Check if it's third party routes
    * @protected
@@ -37,6 +49,14 @@ export class GatewayService {
     } else {
       return true;
     }
+  }
+
+  protected getExchangeToipic(endPoint: string): string | null {
+    const USERAPIREGEX = new RegExp(APIEvent.USERAPI);
+    if (USERAPIREGEX.test(endPoint)) {
+      return config.EVENT_STORE_SETTINGS.topics.userEvent;
+    }
+    return null;
   }
 
   /**
@@ -108,7 +128,7 @@ export class GatewayService {
    * @param {Request} req
    * @returns {Promise<HttpException | unknown>}
    */
-  public async postRequest(req: Request): Promise<HttpException | unknown> {
+  public async postRequest(req: Request, res: Response): Promise<HttpException | unknown> {
     // get current service name
     const serviceName: string | undefined = req.header('service-name');
     /**
@@ -142,8 +162,15 @@ export class GatewayService {
 
     // replace req.url to endpoint
     const endpoint: string = req.url.replace(`/${config.PREFIX}${config.API_EXPLORER_PATH}`, '');
+    const files = req['files'] ? [req['files']] : [];
 
     try {
+      if (req.query.type === 'async') {
+        const topic = this.getExchangeToipic(endpoint);
+        const event = await this.comandBus.execute(new AddRestEventCMD(endpoint, [req.headers], [req.query], [req.params], [req.body], files, [req.cookies]));
+        this.gatewayKafkaProudcerService.produce(topic, event, event.id);
+        return res.sendStatus(HttpStatus.ACCEPTED);
+      }
       if (req.headers['content-type'].includes('multipart/form-data')) {
         return await APIRequestFactory.createRequest('standard').makeRequest({
           url: `http://${service.host}:${service.port}${endpoint}`,
@@ -180,7 +207,7 @@ export class GatewayService {
    * @param {Request} req
    * @returns {Promise<HttpException | unknown>}
    */
-  public async putRequest(req: Request): Promise<HttpException | unknown> {
+  public async putRequest(req: Request, res: Response): Promise<HttpException | unknown> {
     // get current service name
     const serviceName: string | undefined = req.header('service-name');
     /**
@@ -223,6 +250,12 @@ export class GatewayService {
     const endpoint: string = req.url.replace(`/${config.PREFIX}${config.API_EXPLORER_PATH}`, '');
 
     try {
+      if (req.query.type === 'async') {
+        const topic = this.getExchangeToipic(endpoint);
+        const event = await this.comandBus.execute(new AddRestEventCMD(endpoint, [req.headers], [req.query], [req.params], [req.body], [], [req.cookies]));
+        this.gatewayKafkaProudcerService.produce(topic, event, event.id);
+        return res.sendStatus(HttpStatus.ACCEPTED);
+      }
       return await APIRequestFactory.createRequest('standard').makeRequest({
         url: `http://${service.host}:${service.port}${endpoint}`,
         method: 'PUT',

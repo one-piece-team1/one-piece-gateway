@@ -1,11 +1,18 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { MulterModule } from '@nestjs/platform-express';
+import { CqrsModule } from '@nestjs/cqrs';
+import EventStoreDBModule from '../databases/event-store-db.module';
 import { GatewayController } from './gateway.controller';
 import { GatewayService } from './gateway.service';
-import { MulterModule } from '@nestjs/platform-express';
+import { RestEventStoreProvider } from './domains/rest-event/providers/rest-event.provider';
+import { RestEventStoreHandlers } from './domains/rest-event/commands/handlers';
+import RestEventStoreRepository from './domains/rest-event/stores/rest-event.store';
+import { GatewayKafkaProudcerService } from '../producers/restevent.producer';
+import { GatewayKakfaConsumerService } from '../consumers/restevent.consumer';
 
 @Module({
-  imports: [MulterModule.register()],
+  imports: [MulterModule.register(), CqrsModule, EventStoreDBModule],
   controllers: [GatewayController],
-  providers: [GatewayService],
+  providers: [...RestEventStoreHandlers, RestEventStoreRepository, ...RestEventStoreProvider, GatewayService, GatewayKafkaProudcerService, GatewayKakfaConsumerService],
 })
 export class GatewayModule {}

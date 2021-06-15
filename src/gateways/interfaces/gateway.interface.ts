@@ -9,3 +9,22 @@ export interface IErrorStruct {
   message?: any;
   error?: any;
 }
+
+interface IEventApiResponseBase {
+  id: string;
+}
+
+type Status = 'error' | 'success';
+
+export interface IEventApiResponse<T> extends IEventApiResponseBase {
+  status: Status;
+  statusCode: number;
+  message?: T;
+}
+
+export interface IRestEventResponseCommand {
+  id: string;
+  requestId: string;
+  type: string;
+  response: IEventApiResponse<any>;
+}
