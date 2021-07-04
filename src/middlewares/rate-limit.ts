@@ -2,7 +2,6 @@ import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import Redis from 'ioredis';
 import { config } from '../../config';
-const redisClient = new Redis(config.REDIS_URL);
 
 interface IRateLimit {
   request_time: Date;
@@ -11,6 +10,7 @@ interface IRateLimit {
 
 @Injectable()
 export class RateMiddleware implements NestMiddleware {
+  public readonly redisClient = new Redis(config.REDIS_URL);
   /**
    * @description Rate Limit Handling
    * @param {Request} req
@@ -27,7 +27,7 @@ export class RateMiddleware implements NestMiddleware {
     const token = req.headers.authorization.replace('Bearer ', '');
 
     // start redis process
-    redisClient.exists(token, (err, reply) => {
+    this.redisClient.exists(token, (err, reply) => {
       if (err) {
         Logger.log(err.message, 'REDIS-RATE-LIMIT-ERR', true);
         process.exit(0);
@@ -35,7 +35,7 @@ export class RateMiddleware implements NestMiddleware {
       // if redis responding
       if (reply === 1) {
         // get redis data by token
-        redisClient.get(token, (err, response) => {
+        this.redisClient.get(token, (err, response) => {
           if (err) {
             Logger.log(err.message, 'REDIS-RATE-LIMIT-ERR', true);
           }
@@ -83,7 +83,7 @@ export class RateMiddleware implements NestMiddleware {
               counter: 1,
             });
           }
-          redisClient.set(token, JSON.stringify(data), 'EX', 60);
+          this.redisClient.set(token, JSON.stringify(data), 'EX', 60);
           next();
         });
       } else {
@@ -94,7 +94,7 @@ export class RateMiddleware implements NestMiddleware {
           }),
           counter: 1,
         });
-        redisClient.set(token, JSON.stringify(data), 'EX', 60);
+        this.redisClient.set(token, JSON.stringify(data), 'EX', 60);
         next();
       }
     });
